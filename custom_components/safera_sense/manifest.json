@@ -1,0 +1,32 @@
+{
+  "domain": "safera_sense",
+  "name": "Safera Sense",
+  "bluetooth": [
+    {
+      "service_uuid": "0000f00d-1212-efde-1523-785fef13d123",
+      "connectable": true
+    },
+    {
+      "local_name": "iSense*",
+      "connectable": true
+    },
+    {
+      "local_name": "Sense_*",
+      "connectable": true
+    },
+    {
+      "local_name": "Røroshetta*",
+      "connectable": true
+    }
+  ],
+  "codeowners": ["@christophebaraer"],
+  "config_flow": true,
+  "dependencies": ["bluetooth_adapters"],
+  "documentation": "https://github.com/christophebaraer/ha-safera-sense",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/christophebaraer/ha-safera-sense/issues",
+  "loggers": ["safera_sense_ble"],
+  "requirements": ["safera-sense-ble==0.2.0"],
+  "version": "1.2.0"
+}

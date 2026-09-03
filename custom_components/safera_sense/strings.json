@@ -1,0 +1,128 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Select your Safera Sense device. If it was not recognized automatically, all visible Bluetooth devices are listed.",
+        "data": {
+          "address": "Device"
+        }
+      },
+      "bluetooth_confirm": {
+        "description": "Set up {name}?"
+      }
+    },
+    "abort": {
+      "no_devices_found": "No Bluetooth devices found. Make sure Home Assistant has a Bluetooth adapter or an ESPHome Bluetooth proxy in range of the hood, and that the mobile app is not connected to it.",
+      "already_configured": "Device is already configured",
+      "not_supported": "Device is not a Safera Sense"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Safety and control changes (alarms, cooking activity, fan, light, grease filter) always update immediately. Environmental sensors (temperature, humidity, air quality…) update at most once per interval to limit database writes.",
+        "data": {
+          "update_interval": "Environmental sensor update interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "fan": {
+      "hood_fan": {
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "auto": "Auto",
+              "boost": "Boost"
+            }
+          }
+        }
+      }
+    },
+    "light": {
+      "hood_light": {
+        "name": "Light"
+      }
+    },
+    "sensor": {
+      "ambient_temperature": {
+        "name": "Ambient temperature"
+      },
+      "surface_temperature": {
+        "name": "Surface temperature"
+      },
+      "pan_temperature": {
+        "name": "Pan temperature"
+      },
+      "ambient_light": {
+        "name": "Ambient light"
+      },
+      "eco2": {
+        "name": "eCO2"
+      },
+      "tvoc": {
+        "name": "tVOC"
+      },
+      "air_quality_index": {
+        "name": "Air quality index"
+      },
+      "stove_power": {
+        "name": "Stove power"
+      },
+      "activity_level": {
+        "name": "Cooking activity level"
+      },
+      "alarm_level": {
+        "name": "Alarm level"
+      },
+      "device_state": {
+        "name": "Device state",
+        "state": {
+          "none": "None",
+          "start": "Starting",
+          "idle": "Idle",
+          "self_check": "Self check",
+          "pairing_rcl2": "Pairing (RCL2)",
+          "pairing_ble": "Pairing (Bluetooth)",
+          "poweroff_warning": "Power-off warning",
+          "poweroff": "Powered off",
+          "fire_warning": "Fire warning",
+          "fire": "Fire",
+          "locked_warning": "Locked (warning)",
+          "locked_poweroff": "Locked (powered off)",
+          "lockoff_power_check": "Lock-off power check",
+          "lockoff_power_check_warn": "Lock-off power check warning",
+          "current_cal": "Current calibration",
+          "remote_maintenance": "Remote maintenance"
+        }
+      },
+      "wifi_ssid": {
+        "name": "Wi-Fi SSID"
+      },
+      "grease_filter": {
+        "name": "Grease filter"
+      }
+    },
+    "button": {
+      "filter_cleaned": {
+        "name": "Filter cleaned"
+      }
+    },
+    "binary_sensor": {
+      "cooking": {
+        "name": "Cooking"
+      },
+      "alarm": {
+        "name": "Alarm"
+      },
+      "stove_power_cut": {
+        "name": "Stove power cut"
+      },
+      "sensor_problem": {
+        "name": "Sensor problem"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+pytest-homeassistant-custom-component
+# Optional deps of homeassistant.components.bluetooth/usb needed at import time
+aiousbwatcher
+fnv-hash-fast
+serialx
