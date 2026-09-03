@@ -2,6 +2,7 @@
 
 Local BLE integration for Safera Sense cooking sensors, as built into
 Røros Hetta (and other) cooker hoods. Protocol reverse engineered by
+https://github.com/magicus/safera-ble and
 https://github.com/havardgulldahl/rorossense-ble
 """
 
