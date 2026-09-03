@@ -1,7 +1,7 @@
 # Safera Sense for Home Assistant
 
-[![Validate](https://github.com/christophebaraer/ha-safera-sense/actions/workflows/validate.yml/badge.svg)](https://github.com/christophebaraer/ha-safera-sense/actions/workflows/validate.yml)
-[![Tests](https://github.com/christophebaraer/ha-safera-sense/actions/workflows/test.yml/badge.svg)](https://github.com/christophebaraer/ha-safera-sense/actions/workflows/test.yml)
+[![Validate](https://github.com/crillebaba/ha-safera-sense/actions/workflows/validate.yml/badge.svg)](https://github.com/crillebaba/ha-safera-sense/actions/workflows/validate.yml)
+[![Tests](https://github.com/crillebaba/ha-safera-sense/actions/workflows/test.yml/badge.svg)](https://github.com/crillebaba/ha-safera-sense/actions/workflows/test.yml)
 
 Local Bluetooth (BLE) integration for **Safera Sense** cooking sensors, as
 built into **Røros Hetta** cooker hoods (Safera Sense Integral) and sold
@@ -26,7 +26,7 @@ extended sensor report, confirmed experimentally), and the **PM2.5**
 interpretation of the particle index field.
 
 Communication is handled by the
-[safera-sense-ble](https://github.com/christophebaraer/safera-sense-ble)
+[safera-sense-ble](https://github.com/crillebaba/safera-sense-ble)
 Python library. Unofficial project — not affiliated with Safera Oy or
 Røros Metall AS.
 
@@ -74,7 +74,7 @@ reconnection; a 60 s polling fallback doubles as a connection watchdog.
 ### HACS (recommended)
 
 1. HACS → ⋮ → *Custom repositories* → add
-   `https://github.com/christophebaraer/ha-safera-sense` as an
+   `https://github.com/crillebaba/ha-safera-sense` as an
    *Integration*.
 2. Install **Safera Sense** and restart Home Assistant.
 

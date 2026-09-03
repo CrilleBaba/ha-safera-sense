@@ -19,13 +19,13 @@
       "connectable": true
     }
   ],
-  "codeowners": ["@christophebaraer"],
+  "codeowners": ["@crillebaba"],
   "config_flow": true,
   "dependencies": ["bluetooth_adapters"],
-  "documentation": "https://github.com/christophebaraer/ha-safera-sense",
+  "documentation": "https://github.com/crillebaba/ha-safera-sense",
   "integration_type": "device",
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/christophebaraer/ha-safera-sense/issues",
+  "issue_tracker": "https://github.com/crillebaba/ha-safera-sense/issues",
   "loggers": ["safera_sense_ble"],
   "requirements": ["safera-sense-ble==0.2.0"],
   "version": "1.2.0"
