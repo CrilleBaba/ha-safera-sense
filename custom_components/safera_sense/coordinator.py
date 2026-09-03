@@ -27,7 +27,7 @@ EVENTFUL_FIELDS = (
     "activity_type",
     "connected_accessories",
     "fan_speed_raw",
-    "fan_auto",
+    "hood_flags",
     "light_raw",
     "grease_filter",
 )

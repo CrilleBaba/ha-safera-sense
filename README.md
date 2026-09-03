@@ -34,8 +34,8 @@ Røros Metall AS.
 
 | Platform | Entities |
 | --- | --- |
-| Fan | Hood fan: speeds 1–3, **Auto** and **Boost** preset modes |
-| Light | Hood light: 3 brightness levels |
+| Fan | Hood fan: four speeds (level 4 = boost) plus an **Auto** preset mode |
+| Light | Hood light: three brightness levels, with **Auto** exposed as a light effect |
 | Sensor | Ambient / surface / pan temperature, humidity, ambient light, eCO2, tVOC, air quality index, **PM2.5** (µg/m³), stove power, cooking activity level, alarm level, **grease filter %**, device state, Wi-Fi SSID |
 | Binary sensor | Cooking, safety alarm, stove power cut (stove-guard installs), sensor problem (with error details) |
 | Button | Identify, **Filter cleaned** (resets the grease filter counter) |
@@ -115,7 +115,8 @@ vendor app) and reload the integration.
 - Fan/light/grease-filter state come from the extended sensor report
   that only hood-integrated devices send; a bare stove guard will show
   those entities as unknown.
-- Light auto mode is reported but cannot yet be commanded.
+- Light colour temperature is not yet exposed (the adjustment command
+  needs confirming on real hardware).
 - The event log ("Smart Cooking" timeline) is documented in the
   protocol but not yet exposed.
 

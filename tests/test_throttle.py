@@ -42,8 +42,8 @@ def test_safety_and_control_changes_are_eventful() -> None:
         ("alarm_level", 50),
         ("activity_type", 2),  # cooking
         ("sensor_errors", 0x1000),
-        ("fan_speed_raw", 60),
-        ("fan_auto", True),
+        ("hood_flags", 0x03),  # light auto engaged
+        ("fan_speed_raw", 60),  # fan speed changed
         ("light_raw", 90),
         ("grease_filter", 7),
     ]:

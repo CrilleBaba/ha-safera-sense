@@ -1,4 +1,9 @@
-"""Fan platform: the cooker hood extractor fan."""
+"""Fan platform: the cooker hood extractor fan.
+
+The hood exposes four speed steps (HOOD_MOTOR_SPEED_COUNT = 4), so the
+fan has four discrete speeds -- level 4 is the "boost" step -- plus an
+automatic (air-quality controlled) preset mode.
+"""
 
 from __future__ import annotations
 
@@ -15,9 +20,8 @@ from .coordinator import SaferaSenseCoordinator
 from .entity import SaferaSenseEntity
 
 PRESET_AUTO = "auto"
-PRESET_BOOST = "boost"
 
-SPEED_COUNT = 3  # manual levels 1-3; boost and auto are presets
+SPEED_COUNT = 4  # levels 1-4 (4 = boost); auto is a preset
 
 
 async def async_setup_entry(
@@ -40,7 +44,7 @@ class SaferaHoodFan(SaferaSenseEntity, FanEntity):
         | FanEntityFeature.TURN_ON
         | FanEntityFeature.TURN_OFF
     )
-    _attr_preset_modes = [PRESET_AUTO, PRESET_BOOST]
+    _attr_preset_modes = [PRESET_AUTO]
     _attr_speed_count = SPEED_COUNT
 
     def __init__(self, coordinator: SaferaSenseCoordinator) -> None:
@@ -53,37 +57,38 @@ class SaferaHoodFan(SaferaSenseEntity, FanEntity):
 
     @property
     def is_on(self) -> bool | None:
+        # In auto the mode is engaged even while the fan idles; reflect
+        # the physical fan for is_on and surface auto via preset_mode.
         level = self._level
-        return None if level is None else level > 0
+        if level is None:
+            return None
+        return level > 0
 
     @property
     def percentage(self) -> int | None:
         level = self._level
         if level is None:
             return None
-        return round(min(level, SPEED_COUNT) * 100 / SPEED_COUNT)
+        return round(level * 100 / SPEED_COUNT)
 
     @property
     def preset_mode(self) -> str | None:
         data = self.coordinator.data
         if data is None:
             return None
-        if data.fan_auto:
-            return PRESET_AUTO
-        if data.fan_speed_level == 4:
-            return PRESET_BOOST
-        return None
+        return PRESET_AUTO if data.fan_auto else None
 
     async def async_set_percentage(self, percentage: int) -> None:
+        if percentage == 0:
+            await self.async_turn_off()
+            return
         level = math.ceil(percentage * SPEED_COUNT / 100)
         await self.coordinator.client.set_fan_speed(FanSpeed(level))
         await self.coordinator.async_request_refresh()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
-        if preset_mode == PRESET_AUTO:
-            await self.coordinator.client.set_fan_auto()
-        else:
-            await self.coordinator.client.set_fan_speed(FanSpeed.BOOST)
+        # Only PRESET_AUTO is offered.
+        await self.coordinator.client.set_fan_auto()
         await self.coordinator.async_request_refresh()
 
     async def async_turn_on(
@@ -95,7 +100,7 @@ class SaferaHoodFan(SaferaSenseEntity, FanEntity):
         if preset_mode is not None:
             await self.async_set_preset_mode(preset_mode)
             return
-        await self.async_set_percentage(percentage if percentage is not None else 34)
+        await self.async_set_percentage(percentage if percentage is not None else 25)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self.coordinator.client.set_fan_speed(FanSpeed.OFF)

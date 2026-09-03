@@ -27,6 +27,6 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/crillebaba/ha-safera-sense/issues",
   "loggers": ["safera_sense_ble"],
-  "requirements": ["safera-sense-ble==0.1.0"],
-  "version": "1.0.0"
+  "requirements": ["safera-sense-ble==0.2.0"],
+  "version": "1.1.0"
 }
