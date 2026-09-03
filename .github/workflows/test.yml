@@ -14,7 +14,5 @@ jobs:
         with:
           python-version: "3.14"
       - run: pip install -r requirements_test.txt
-      # TODO: drop once safera-sense-ble is published on PyPI; the
-      # manifest pin (safera-sense-ble==0.1.0) will then resolve there.
-      - run: pip install git+https://github.com/crillebaba/safera-sense-ble.git@main
+      - run: pip install safera-sense-ble==0.1.0
       - run: pytest tests -v
