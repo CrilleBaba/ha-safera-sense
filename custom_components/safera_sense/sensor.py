@@ -25,9 +25,23 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
 from . import SaferaSenseConfigEntry
-from safera_sense_ble import DeviceState, SensorReport
+from safera_sense_ble import ActivityType, CookingEventType, DeviceState, SensorReport
 from .coordinator import SaferaSenseCoordinator
 from .entity import SaferaSenseEntity
+
+# Smart Cooking phase shown when cooking is active, keyed by the most
+# recent event-log entry. Anything else while cooking falls back to
+# "cooking"; when the stove is idle the sensor reads "not_detected".
+COOKING_PHASE = "cooking"
+NOT_DETECTED = "not_detected"
+_EVENT_PHASES = {
+    CookingEventType.COOKING_START: "cooking",
+    CookingEventType.HEATING_START: "heating",
+    CookingEventType.FRYING_START: "frying",
+    CookingEventType.BOILING_START: "boiling",
+    CookingEventType.STEAK_IN: "steak_in",
+}
+SMART_COOKING_OPTIONS = [NOT_DETECTED, *dict.fromkeys(_EVENT_PHASES.values())]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -168,7 +182,37 @@ async def async_setup_entry(
         SaferaSensor(coordinator, description) for description in SENSORS
     ]
     entities.append(SaferaWifiSsidSensor(coordinator))
+    entities.append(SaferaSmartCookingSensor(coordinator))
     async_add_entities(entities)
+
+
+class SaferaSmartCookingSensor(SaferaSenseEntity, SensorEntity):
+    """Current cooking status, mirroring the app's Smart Cooking screen."""
+
+    _attr_translation_key = "smart_cooking"
+    _attr_device_class = SensorDeviceClass.ENUM
+    _attr_options = SMART_COOKING_OPTIONS
+    _attr_icon = "mdi:chef-hat"
+
+    def __init__(self, coordinator: SaferaSenseCoordinator) -> None:
+        super().__init__(coordinator, "smart_cooking")
+
+    @property
+    def native_value(self) -> str | None:
+        report = self.coordinator.data
+        if report is None:
+            return None
+        if report.activity_type != ActivityType.COOKING:
+            return NOT_DETECTED
+        event = self.coordinator.last_cooking_event
+        if event is not None:
+            try:
+                return _EVENT_PHASES.get(
+                    CookingEventType(event.event_type), COOKING_PHASE
+                )
+            except ValueError:
+                return COOKING_PHASE
+        return COOKING_PHASE
 
 
 class SaferaSensor(SaferaSenseEntity, SensorEntity):

@@ -7,10 +7,16 @@ import logging
 import time
 
 from homeassistant.components import bluetooth
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from safera_sense_ble import DeviceInfo, SaferaSenseClient, SensorReport, WifiStatus
+from safera_sense_ble import (
+    CookingEvent,
+    DeviceInfo,
+    SaferaSenseClient,
+    SensorReport,
+    WifiStatus,
+)
 
 from .const import DEFAULT_UPDATE_INTERVAL
 
@@ -62,6 +68,9 @@ class SaferaSenseCoordinator(DataUpdateCoordinator[SensorReport]):
         self._shutdown = False
         self._throttle_seconds = update_interval
         self._last_push = 0.0
+        # Smart Cooking: the most recent event-log entry (newest first),
+        # used to derive the current cooking phase.
+        self.last_cooking_event: CookingEvent | None = None
 
         super().__init__(
             hass,
@@ -110,6 +119,14 @@ class SaferaSenseCoordinator(DataUpdateCoordinator[SensorReport]):
 
         await self.client.subscribe_sensor_reports(self._handle_report)
 
+        # Read the current Smart Cooking timeline, then subscribe for
+        # updates so the cooking phase stays current.
+        try:
+            self._update_last_cooking_event(await self.client.fetch_event_log())
+            await self.client.subscribe_event_log(self._handle_event_log)
+        except Exception:  # noqa: BLE001
+            _LOGGER.debug("Could not set up cooking event log", exc_info=True)
+
         if _LOGGER.isEnabledFor(logging.DEBUG):
             # Protocol investigation: dump all readable characteristics
             # once per connection to help decode remaining unknown fields.
@@ -130,6 +147,17 @@ class SaferaSenseCoordinator(DataUpdateCoordinator[SensorReport]):
         ):
             self._last_push = now
             self.async_set_updated_data(report)
+
+    def _update_last_cooking_event(self, events: list[CookingEvent]) -> None:
+        """Store the most recent event (the list is newest-first)."""
+        self.last_cooking_event = events[0] if events else None
+
+    @callback
+    def _handle_event_log(self, events: list[CookingEvent]) -> None:
+        """Handle a Smart Cooking event-log notification."""
+        self._update_last_cooking_event(events)
+        # Refresh entities that derive the cooking phase from this.
+        self.async_update_listeners()
 
     def _handle_disconnect(self, _client) -> None:
         """Handle an unexpected disconnect; schedule a reconnect."""

@@ -103,11 +103,25 @@
       },
       "grease_filter": {
         "name": "Grease filter"
+      },
+      "smart_cooking": {
+        "name": "Smart Cooking",
+        "state": {
+          "not_detected": "Cooking Not Detected",
+          "cooking": "Cooking",
+          "heating": "Heating",
+          "frying": "Frying",
+          "boiling": "Boiling",
+          "steak_in": "Steak in"
+        }
       }
     },
     "button": {
       "filter_cleaned": {
         "name": "Filter cleaned"
+      },
+      "clear_timeline": {
+        "name": "Clear timeline"
       }
     },
     "binary_sensor": {

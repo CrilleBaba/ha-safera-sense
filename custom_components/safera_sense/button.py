@@ -25,6 +25,7 @@ async def async_setup_entry(
         [
             SaferaIdentifyButton(entry.runtime_data),
             SaferaFilterCleanedButton(entry.runtime_data),
+            SaferaClearTimelineButton(entry.runtime_data),
         ]
     )
 
@@ -55,3 +56,17 @@ class SaferaFilterCleanedButton(SaferaSenseEntity, ButtonEntity):
     async def async_press(self) -> None:
         await self.coordinator.client.reset_grease_filter()
         await self.coordinator.async_request_refresh()
+
+
+class SaferaClearTimelineButton(SaferaSenseEntity, ButtonEntity):
+    """Clears the Smart Cooking timeline (event log)."""
+
+    _attr_translation_key = "clear_timeline"
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_icon = "mdi:timeline-remove"
+
+    def __init__(self, coordinator: SaferaSenseCoordinator) -> None:
+        super().__init__(coordinator, "clear_timeline")
+
+    async def async_press(self) -> None:
+        await self.coordinator.client.clear_event_log()

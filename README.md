@@ -36,9 +36,9 @@ Røros Metall AS.
 | --- | --- |
 | Fan | Hood fan: four speeds (level 4 = boost) plus an **Auto** preset mode |
 | Light | Hood light: three brightness levels, with **Auto** exposed as a light effect |
-| Sensor | Ambient / surface / pan temperature, humidity, ambient light, eCO2, tVOC, air quality index, **PM2.5** (µg/m³), stove power, cooking activity level, alarm level, **grease filter %**, device state, Wi-Fi SSID |
+| Sensor | Ambient / surface / pan temperature, humidity, ambient light, eCO2, tVOC, air quality index, **PM2.5** (µg/m³), stove power, cooking activity level, alarm level, **grease filter %**, **Smart Cooking** status, device state, Wi-Fi SSID |
 | Binary sensor | Cooking, safety alarm, stove power cut (stove-guard installs), sensor problem (with error details) |
-| Button | Identify, **Filter cleaned** (resets the grease filter counter) |
+| Button | Identify, **Filter cleaned** (resets the grease filter counter), **Clear timeline** (clears the Smart Cooking events) |
 
 ## How updates work
 
@@ -117,8 +117,9 @@ vendor app) and reload the integration.
   those entities as unknown.
 - Light colour temperature is not yet exposed (the adjustment command
   needs confirming on real hardware).
-- The event log ("Smart Cooking" timeline) is documented in the
-  protocol but not yet exposed.
+- The Smart Cooking sensor reflects the current cooking phase; it is not
+  a full per-event history (individual stove-alarm/button events aren't
+  surfaced as discrete triggers).
 
 ## License
 
